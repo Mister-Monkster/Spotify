@@ -122,15 +122,16 @@ async def profile(message: Message, service: TelegramService, bot: Bot):
         await message.delete()
         res = await service.me(message.from_user.id)
         if res == 404:
-            await bot.send_message(message.chat.id, 'Не удалость получить ваш профиль')
+            await bot.send_message(message.from_user.id, 'Не удалость получить ваш профиль')
             return None
-        await bot.send_message(message.chat.id,
+        await bot.send_message(message.from_user.id,
                                res,
                                parse_mode='HTML',
                                link_preview_options=LinkPreviewOptions(show_above_text=True))
         return None
     except:
-        await message.reply('Произошла ошибка, проверьте статус авторизации\n /start')
+        await bot.send_message(message.from_user.id,
+                               'Произошла ошибка, проверьте статус авторизации\n /start')
         return None
 
 
