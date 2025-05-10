@@ -25,9 +25,9 @@ class TelegramService:
             artist_str = f'<i><a href="{artist[1]}">{artist[0]}</a></i>'
             artists.append(artist_str)
         current_track_text = (f'<a href="{res["image"]}">&#8203;</a>\n'
-                              f'<b>Track</b> <i><a href="{res['track_url']}">{res['name']}</a></i>\n'
-                              f'<b>Album</b> <i><a href="{res['album_url']}">{res['album']}</a></i>\n'
-                              f"<b>Artists</b> <i>{', '.join(artists)}</i>\n"
+                              f'<b>🔈Track</b> <i><a href="{res['track_url']}">{res['name']}</a></i>\n'
+                              f'<b>💿Album</b> <i><a href="{res['album_url']}">{res['album']}</a></i>\n'
+                              f"<b>🎙Artists</b> <i>{', '.join(artists)}</i>\n"
                               f"<code><i>{res['bar']}</i></code>")
         return current_track_text
 

@@ -41,7 +41,7 @@ class SpotifyService:
             return "0:00 / 0:00"
         percentage = (position / total) * 100
         filled_chars = int(percentage / 100 * bar_length)
-        bar = '▪️' * (filled_chars - 1) + '◾️' + '▫️' * (bar_length - filled_chars)
+        bar = '🟢' * (filled_chars - 1) + '🔘' + '⚫️' * (bar_length - filled_chars)
         current_time = await self.ms_to_str(position)
         total_time = await self.ms_to_str(total)
         return f"{current_time} {bar} {total_time}"
