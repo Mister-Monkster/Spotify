@@ -2,7 +2,7 @@ from aiogram import Router, Bot
 from aiogram.filters import Command
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, LinkPreviewOptions
 
-from service import TelegramService
+from bot.service import TelegramService
 
 router = Router()
 
@@ -21,6 +21,25 @@ async def start(message: Message, service: TelegramService, bot: Bot):
         return None
     except:
         await bot.send_message(message.chat.id, 'Вы уже авторизованы.')
+
+
+@router.message(Command('help'))
+async def help(message: Message, bot: Bot):
+    await message.delete()
+    img_url = "https://m.buro247.ru/images/senina/130080433.jpg"
+    text = (f'<a href="{img_url}">&#8203;</a>\n'
+            f'/start - Получить ссылку на авторизацию\n'
+            f'/track - Бот отправит информацию о текущем треке\n'
+            f'/top_tracks - Ваш топ-10 треков за месяц\n'
+            f'/top_artists - Ваш топ-10 артистов за месяц\n'
+            f'/playlists - Ваши плейлисты\n'
+            f'/me - Проверка авторизации(если бот отправляет ващ профиль, значит вы авторизованы)\n'
+            f'/logout - Выход из вашего аккаунта Spotify\n')
+    await bot.send_message(message.chat.id,
+                           text,
+                           parse_mode='HTML',
+                           link_preview_options=LinkPreviewOptions(show_above_text=True))
+    return None
 
 
 @router.message(Command('track'))
@@ -133,6 +152,18 @@ async def profile(message: Message, service: TelegramService, bot: Bot):
         await bot.send_message(message.from_user.id,
                                'Произошла ошибка, проверьте статус авторизации\n /start')
         return None
+
+@router.message(Command('logout'))
+async def logout(message: Message, service: TelegramService, bot: Bot):
+    try:
+        await message.delete()
+        res = await service.logout(message.from_user.id)
+        if res:
+            await bot.send_message(message.chat.id,'Вы успешно вышли из аккаунта Spotify.')
+            return None
+        await bot.send_message(message.chat.id,'Не удалось выйти из аккаунта Spotify.')
+    except:
+        await bot.send_message(message.chat.id, 'Произошла ошибка. Попробуйте позже.')
 
 
 

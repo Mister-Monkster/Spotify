@@ -243,6 +243,7 @@ class SpotifyService:
         Возвращает список альбомов пользователя.
         """
         sp = await self.get_spotify_client(user_id)
+
         try:
             albums = sp.current_user_playlists()
         except spotipy.SpotifyException as e:
@@ -259,3 +260,16 @@ class SpotifyService:
             }
             res.append(SAlbum.model_validate(album_dict))
         return res
+
+    async def logout(self, user_id):
+        """
+        Выход из аккаунта spotify
+        """
+        try:
+            file = f'.cache-{user_id}'
+            if os.path.exists(file):
+                os.remove(file)
+            await self.redis.delete(user_id)
+            return True
+        except:
+            return False

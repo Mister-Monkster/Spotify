@@ -1,9 +1,6 @@
 import requests
 
 
-
-
-
 class TelegramService:
     def __init__(self):
         self.image_for_top = "https://cloudfront-us-east-1.images.arcpublishing.com/infobae/YPKERJYVRZBXHGJUI4WSWFUTVA.jpg"
@@ -31,6 +28,7 @@ class TelegramService:
                               f"<code><i>{res['bar']}</i></code>")
         return current_track_text
 
+
     async def top_tracks(self, user_id):
         res = requests.get(f'http://127.0.0.1:8000/top-tracks/{user_id}').json()
         if not res:
@@ -45,8 +43,8 @@ class TelegramService:
                 artist_str = f'<i><a href="{artist[1]}">{artist[0]}</a></i>'
                 artists.append(artist_str)
             track_text = (
-                          f'<b>Place {place}</b>.\n'
-                          f' <b>Track</b> <i><a href="{item['track_url']}">{item["name"]}</a></i>\n'
+                          f'<b>Place <i>{place}</i></b>\n'
+                          f'<b>Track</b> <i><a href="{item['track_url']}">{item["name"]}</a></i>\n'
                           f'<b>Album</b> <i><a href="{item['album_url']}">{item["album"]}</a></i>\n'
                           f'<b>Artists</b> <i>{", ".join(artists)}</i>\n\n')
             text += track_text
@@ -62,8 +60,8 @@ class TelegramService:
         place = 1
         for item in res:
             artist_text = (
-                           f'Place <b>{place}</b>.\n'
-                           f' <b>{item["name"]}</b>\n'
+                           f'<b>Place <i>{place}</i></b>\n'
+                           f'<b>{item["name"]}</b>\n'
                            f'Подписчиков: <i>{item["followers"]}</i>\n'
                            f'Популярность: <i>{item["popularity"]}</i>\n\n')
             text += artist_text
@@ -91,5 +89,11 @@ class TelegramService:
                 f'Вот ваш профиль Spotify\n'
                 f'<a href="{res['url']}">{res['name']}</a>')
         return text
+
+    async def logout(self, user_id):
+        res = requests.delete(f'http://127.0.0.1:8000/logout/{user_id}').json()
+        if not res['ok']:
+            return False
+        return res
 
 

@@ -63,3 +63,12 @@ async def albums(tg_id: str, service: ServiceDep) -> list[SAlbum] | None:
     if albums is None:
         raise HTTPException(status_code=404)
     return albums
+
+
+@router.delete('/logout/{tg_id}')
+async def logout(tg_id: str, service: ServiceDep):
+    try:
+        await service.logout(tg_id)
+        return {'ok': True, 'detail': 'Logout successful'}
+    except:
+        return {'ok': False, 'detail': 'Logout failed'}
